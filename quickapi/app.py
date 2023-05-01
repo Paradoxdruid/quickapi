@@ -1,4 +1,5 @@
 from bonhamtime import BonhamTime
+from buffer import Buffer
 from flask import Flask, redirect
 from flask_restful import Api, Resource
 from werkzeug.wrappers import Response as WZResponse
@@ -16,6 +17,7 @@ class Hello(Resource):  # type:ignore[misc]
 
 api.add_resource(Hello, "/")
 api.add_resource(BonhamTime, "/bonhamtime/<int:num>")
+api.add_resource(Buffer, "/buffer")
 
 
 if __name__ == "__main__":

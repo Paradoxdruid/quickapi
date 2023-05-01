@@ -1,6 +1,6 @@
 import datetime
 
-from flask import Response, jsonify
+from flask import Response, make_response
 from flask_restful import Resource
 
 
@@ -14,4 +14,12 @@ class BonhamTime(Resource):  # type:ignore[misc]
         return user_days / BONHAM_LENGTH
 
     def get(self, num: int) -> Response:
-        return jsonify({"time_in_bonhams": self.time_to_bonham(num)})
+        bonham_time = self.time_to_bonham(num)
+
+        headers = {"Content-Type": "text/html"}
+
+        template = f"""<!doctype html>
+        <title>Bonham Time: {bonham_time}</title>
+        <h1>Bonham Time: {bonham_time}</h1>"""
+
+        return make_response(template, 200, headers)
