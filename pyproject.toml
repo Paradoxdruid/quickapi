@@ -1,0 +1,30 @@
+[project]
+name = "quickapi"
+version = "0.0.1"
+authors = [{name = "Paradoxdruid", email = "bonham@gmail.com"}]
+requires-python = ">=3.10"
+classifiers = [
+    "License :: OSI Approved :: MIT License", 
+    "Programming Language :: Python :: 3",
+]
+dependencies = ["flask"]
+# urls = {homepage = "https://bonhamcode.com"}
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "mypy",
+    "ruff",
+]
+
+[tool.mypy]
+ignore_missing_imports = true
+strict = true
+files = "*.py"
+
+[tool.black]
+line-length = 88
+
+[tool.ruff]
+select = ["E", "F", "B", "W", "I", "C4", "PIE", "PYI"]
+ignore = ["B905"]
