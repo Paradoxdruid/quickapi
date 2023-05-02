@@ -2,6 +2,7 @@ from bonhamtime import BonhamTime
 from buffer import Buffer
 from flask import Flask, redirect
 from flask_restful import Api, Resource
+from ref_electrode import RefElectrode
 from werkzeug.wrappers import Response as WZResponse
 
 app = Flask(__name__)
@@ -18,6 +19,7 @@ class Hello(Resource):  # type:ignore[misc]
 api.add_resource(Hello, "/")
 api.add_resource(BonhamTime, "/bonhamtime/<int:num>")
 api.add_resource(Buffer, "/buffer")
+api.add_resource(RefElectrode, "/electrode")
 
 
 if __name__ == "__main__":
