@@ -1,8 +1,6 @@
-from bonhamtime import BonhamTime
-from buffer import Buffer
 from flask import Flask, redirect
 from flask_restful import Api, Resource
-from ref_electrode import RefElectrode
+from plugins import BonhamTime, Buffer, RefElectrode
 from werkzeug.wrappers import Response as WZResponse
 
 app = Flask(__name__)
