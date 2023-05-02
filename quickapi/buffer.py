@@ -1,8 +1,8 @@
-from flask import Response, jsonify
+from flask import Response, jsonify, make_response
 from flask_restful import Resource, reqparse
 
 # Request url should look like:
-# https://bonh.am/buffer?buffer_conc_inital=1&buffer_conc_final=0.1&pka=4.76&volume=1&hcl=6&naoh=6&initial_ph=4.5&final_ph=5.2
+# https://bonh.am/buffer?buffer_conc_inital=1&buffer_conc_final=0.1&pka=4.76&volume=1&hcl=6&naoh=6&initial_ph=4.5&final_ph=5.2&pretty=1
 
 
 def buffer_solver(
@@ -142,6 +142,13 @@ class Buffer(Resource):  # type:ignore[misc]
             location="args",
             required=True,
         )
+        parser.add_argument(
+            "pretty",
+            type=int,
+            help="Print pretty html",
+            location="args",
+            default=0,
+        )
 
         args = parser.parse_args()
 
@@ -156,4 +163,15 @@ class Buffer(Resource):  # type:ignore[misc]
             args["final_ph"],
         )
 
-        return jsonify({"recipe": result})
+        if args["pretty"] == 1:
+            headers = {"Content-Type": "text/html"}
+
+            template = f"""<!doctype html>
+            <title>Buffer Solver</title>
+            <h1>Buffer Titration Solver</h1>
+            <h2>Recipe: {result}</h2>"""
+
+            return make_response(template, 200, headers)
+
+        else:
+            return jsonify({"recipe": result})
