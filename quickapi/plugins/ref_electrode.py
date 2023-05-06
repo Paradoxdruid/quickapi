@@ -25,7 +25,7 @@ class RefElectrode(Resource):  # type:ignore[misc]
     AgCl0p1M: Ag/AgCl 0.1M KCl, AgClNaCl: Ag/AgCL Saturated NaCl"
 
     @staticmethod
-    def electrode_calc(voltage: float, input: str, output: str) -> str:
+    def electrode_calc(voltage: float, input: str, output: str) -> float:
         return (
             voltage
             + RefElectrode.REFERENCE.get(input, 0)

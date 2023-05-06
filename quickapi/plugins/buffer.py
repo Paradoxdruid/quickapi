@@ -1,4 +1,4 @@
-from flask import Response, jsonify, make_response
+from flask import Response, jsonify, make_response, render_template
 from flask_restful import Resource, reqparse
 
 # Request url should look like:
@@ -76,7 +76,7 @@ class Buffer(Resource):  # type:ignore[misc]
         volume_water = total_volume - (volume_titrant + buffer_volume)
 
         return (
-            "add {} liters stock buffer, "
+            "Add {} liters stock buffer, "
             "{} liters of stock {}, and {} liters of water."
         ).format(
             round(buffer_volume, 4),
@@ -167,12 +167,9 @@ class Buffer(Resource):  # type:ignore[misc]
         if args["pretty"] == 1:
             headers = {"Content-Type": "text/html"}
 
-            template = f"""<!doctype html>
-            <title>Buffer Solver</title>
-            <h1>Buffer Titration Solver</h1>
-            <h2>Recipe: {result}</h2>"""
-
-            return make_response(template, 200, headers)
+            return make_response(
+                render_template("buffer.html", result=result), 200, headers
+            )
 
         else:
             return jsonify({"recipe": result})
