@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Reference Electrode Converter</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-secondary">
+    <div class="card mx-auto mt-5" style="width: 24rem">
+      <div class="card-body">
+        <h5 class="card-title fs-3">Reference Electrode Converter</h5>
+        <p class="card-text fs-4">Input Voltage: {{voltage}} mV <br />
+            Input Reference: {{input}} <br />
+            Output Reference: {{output}} <br />
+            <strong>Output Voltage: {{result}} mV</strong>
+        </p>
+        <hr />
+        <p class="card-text fs-3">Valid Electrodes:</p>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th>URL Key</th>
+                    <th>Electrode</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for key, value in values.items() %}
+                 <tr>
+                     <td> {{ key }} </td>
+                     <td> {{ value }} </td>
+                 </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+      </div>
+
+
+    <!-- Bootstrap Javascripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

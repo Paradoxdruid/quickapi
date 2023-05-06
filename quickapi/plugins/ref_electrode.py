@@ -1,7 +1,7 @@
 # urls of form:
 # https://bonh.am/electrode?voltage=200&input=AgClSat&output=NHE&pretty=1
 
-from flask import Response, jsonify, make_response
+from flask import Response, jsonify, make_response, render_template
 from flask_restful import Resource, reqparse
 
 
@@ -19,10 +19,20 @@ class RefElectrode(Resource):  # type:ignore[misc]
         "AgClNaCl": 197,
     }
 
-    VALUES = "NHE: Normal Hydrogen, SHE: Standard Hydrogen, SCE: Saturated KCl, \
-    CalSat: Saturated Calomel, Cal1M: Calomel 1M KCl, Cal0p1M: Calomel 0.1M KCl, \
-    CalNaCl: Calomel Saturated NaCl, AgClSat: Ag/AgCL Saturated KCl, \
-    AgCl0p1M: Ag/AgCl 0.1M KCl, AgClNaCl: Ag/AgCL Saturated NaCl"
+    VALUES = {
+        "NHE": "Normal Hydrogen Electrode",
+        "SHE": "Standard Hydrogen Electrode",
+        "SCE": "Saturated KCl",
+        "CalSat": "Saturated Calomel",
+        "Cal1M": "Calomel 1M KCl",
+        "Cal0p1M": "Calomel 0.1M KCl",
+        "CalNaCl": "Calomel Saturated NaCl",
+        "AgClSat": "Ag/AgCL Saturated KCl",
+        "AgCl0p1M": "Ag/AgCl 0.1M KCl",
+        "AgClNaCl": "Ag/AgCL Saturated NaCl",
+    }
+
+    VALUE_LIST = ",".join([f"{key}:{value}" for key, value in VALUES.items()])
 
     @staticmethod
     def electrode_calc(voltage: float, input: str, output: str) -> float:
@@ -44,14 +54,14 @@ class RefElectrode(Resource):  # type:ignore[misc]
         parser.add_argument(
             "input",
             type=str,
-            help=f"Type of input reference electrode, from: {RefElectrode.VALUES}",
+            help=f"Type of input reference electrode, from: {RefElectrode.VALUE_LIST}",
             location="args",
             required=True,
         )
         parser.add_argument(
             "output",
             type=str,
-            help=f"Type of input reference electrode, from: {RefElectrode.VALUES}",
+            help=f"Type of input reference electrode, from: {RefElectrode.VALUE_LIST}",
             location="args",
             required=True,
         )
@@ -74,15 +84,18 @@ class RefElectrode(Resource):  # type:ignore[misc]
         if args["pretty"] == 1:
             headers = {"Content-Type": "text/html"}
 
-            template = f"""<!doctype html>
-            <title>Reference Electrode Converter</title>
-            <h1>Reference Electrode Converter</h1>
-            <h3>Input Voltage: {args["voltage"]} mV</h3>
-            <h3>Input Reference: {args["input"]}</h3>
-            <h3>Output Reference: {args["output"]}</h3>
-            <h2>Output Voltage: {result} mV</h2>"""
-
-            return make_response(template, 200, headers)
+            return make_response(
+                render_template(
+                    "ref_electrode.html",
+                    voltage=args["voltage"],
+                    input=args["input"],
+                    output=args["output"],
+                    result=result,
+                    values=RefElectrode.VALUES,
+                ),
+                200,
+                headers,
+            )
 
         else:
             return jsonify({"output": result})
