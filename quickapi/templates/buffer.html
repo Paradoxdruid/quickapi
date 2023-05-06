@@ -8,16 +8,44 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css" />
   </head>
   <body class="bg-secondary">
-    <div class="card mx-auto mt-5" style="width: 24rem">
+    <div class="card mx-auto mt-5" style="width: 40rem">
       <div class="card-body">
         <h5 class="card-title fs-3">Buffer Recipe</h5>
         <p class="card-text fs-4">{{ result}}</p>
+        <hr />
+          <p class="card-text fs-3">API Usage:</p>
+          <pre>
+            <code class="language-python">import requests
+import json
+import urllib
+
+conditions = {
+    "buffer_conc_inital": 1,
+    "buffer_conc_final": 0.1,
+    "pka": 4.76,
+    "volume": 1,
+    "hcl": 6,
+    "naoh": 6,
+    "initial_ph": 4.5,
+    "final_ph": 5.2, 
+}
+
+params = urllib.parse.urlencode(conditions)
+
+r = requests.get(f"https://bonh.am/buffer?{params}&pretty=0")
+recipe = r.json().get("recipe")
+print(recipe) 
+# "Add 0.1 liters stock buffer, 0.0063 liters of stock NaOH, and 0.8937 liters of water."</code>
+</pre>
       </div>
 
 
     <!-- Bootstrap Javascripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
   </body>
 </html>
